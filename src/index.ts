@@ -50,7 +50,7 @@ export class ThreePhysicsComponent extends Scene3D {
 
       const duck: any = gltf.scene.children[0]
       duck.position.y += 1
-      duck.scale.set(3,3,3)
+      duck.scale.set(1.3,1.3,1.3)
       const object = new ExtendedObject3D()
       object.add(duck)
       object.position.z = 6

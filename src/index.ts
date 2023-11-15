@@ -2,6 +2,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Scene3D, PhysicsLoader, Project, ExtendedObject3D } from 'enable3d';
 import * as THREE from 'three'
 
+var frames = 0
+var startTime = performance.now()
+var fpsElement = document.getElementById('fps')!;
+
 export class ThreePhysicsComponent extends Scene3D {
 
   constructor() {
@@ -37,21 +41,21 @@ export class ThreePhysicsComponent extends Scene3D {
 
 
     // apply physic stuff
-    sphere1.body.setBounciness(0.4)
+    sphere1.body.setBounciness(0.74)
     sphere1.body.applyForceX(0.3)
     torus1.body.applyForceX(5)
 
     //gltf loader
-    new GLTFLoader().loadAsync('/Duck.glb').then(gltf => {
+    new GLTFLoader().loadAsync('/fountain.glb').then(gltf => {
 
       const duck: any = gltf.scene.children[0]
-      duck.position.y -= 1
+      duck.position.y += 1
+      duck.scale.set(3,3,3)
       const object = new ExtendedObject3D()
       object.add(duck)
       object.position.z = 6
       this.add.existing(object)
       this.physics.add.existing(object, { shape: 'box', width: 2, height: 2, depth: 2 })
-
       // duck.position.z = 6
       // this.scene.add(duck as any)
       // this.physics.add.existing(duck, { shape: 'convex'})
@@ -79,19 +83,33 @@ export class ThreePhysicsComponent extends Scene3D {
     group.add(c6 as any)
     this.physics.add.existing(group as any)
 
-    // const ball = this.physics.add.sphere({x: -200, y: 20, radius: 3, heightSegments: 16, widthSegments: 16}, {phong: {color: 'black'}})
-    // ball.body.applyForceX(110)
-    // wall
-    // for (let y = 0; y <= 6; y += 2) {
-    //   for (let z = -6; z <= 6; z += 2) {
-    //     for (let x = 4; x <= 8; x += 2) {
-    //       this.physics.add.box({ x, y, z, width: 1.95, height: 1.95, depth: 1.95, mass: 0.3 }, {phong: {color: 'orange'}})
-    //     }
-    //   }
-    // }
+    const ball = this.physics.add.sphere({x: -200, y: 20, radius: 3, heightSegments: 16, widthSegments: 16}, {phong: {color: 'black'}})
+    ball.body.applyForceX(110)
+    for (let y = 0; y <= 6; y += 2) {
+      for (let z = -6; z <= 6; z += 2) {
+        for (let x = 4; x <= 8; x += 2) {
+          this.physics.add.box({ x, y, z, width: 1.95, height: 1.95, depth: 1.95, mass: 0.3 }, {phong: {color: 'orange'}})
+        }
+      }
+    }
   }
 
   update() {
+    const currentTime = performance.now();
+    const deltaTime = currentTime - startTime;
+
+    // Increment frame count
+    frames++;
+
+    // Update FPS every second
+    if (deltaTime >= 1000) {
+        const fps = Math.round((frames * 1000) / deltaTime);
+        fpsElement.textContent = `FPS: ${fps}`;
+
+        // Reset variables for the next second
+        frames = 0;
+        startTime = currentTime;
+    }
 
   }
 

@@ -22,10 +22,10 @@ export class ThreePhysicsComponent extends Scene3D {
   async preload() { }
 
   async create() {
-    map = this.physics.add.ground({ width: 40, height: 40 })
+    // map = this.physics.add.ground({ width: 40, height: 40 })
 
     // set up scene (light, ground, grid, sky, orbitControls)
-    this.warpSpeed("-ground");
+    this.warpSpeed();
     // position camera
     this.camera.position.set(13, 10, 23);
 
@@ -40,7 +40,6 @@ export class ThreePhysicsComponent extends Scene3D {
       { lambert: { color: "orange" } }
     );
     torus1.body.applyForceX(5);
-
     // //gltf loader
     // new GLTFLoader().loadAsync("/fountain.glb").then((gltf) => {
     //   const duck: any = gltf.scene.children[0];
@@ -80,8 +79,22 @@ export class ThreePhysicsComponent extends Scene3D {
       "click",
       this.onMouseClick.bind(this)
     );
+    setInterval(()=> {
+      this.getAndSwitchMap.bind(this)
+    },1000)
   }
+  getAndSwitchMap() {
+    var currentMap = Number((document.getElementById("map") as HTMLSelectElement).options[(document.getElementById("map") as HTMLSelectElement).selectedIndex].value)
+    if (currentMap === 0) {
 
+    }
+    else if(currentMap === 1) {
+
+    }
+    else if (currentMap === 2) {
+
+    }
+  }
   update() {
     const currentTime = performance.now();
     const deltaTime = currentTime - startTime;
@@ -113,10 +126,10 @@ export class ThreePhysicsComponent extends Scene3D {
       const intersectionPoint = intersects[0].point;
       var objectType = getObjectType()
       var color = (document.getElementById("color") as HTMLInputElement).value !== "" ? (document.getElementById("color") as HTMLInputElement).value : "#0000ff"
-      var mass = Number((document.getElementById("mass") as HTMLInputElement).value !== "" ? (document.getElementById("mass") as HTMLInputElement).value : -10)
+      var gravity = Number((document.getElementById("gravity") as HTMLInputElement).value !== "" ? (document.getElementById("gravity") as HTMLInputElement).value : -10)
       var bounce = Number((document.getElementById("bounce") as HTMLInputElement).value !== "" ? (document.getElementById("bounce") as HTMLInputElement).value : 0) / 100
       var friction = Number((document.getElementById("friction") as HTMLInputElement).value !== "" ? (document.getElementById("friction") as HTMLInputElement).value : 50) / 100
-      // Add a new box at the clicked position
+      console.log(`Bounce: ${bounce}, Gravity: ${gravity}, Friction: ${friction}`)
       if (e?.selectedIndex === 0) {
         var squareWidth = (document.getElementById("square-width") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-width") as HTMLInputElement).value : 1;
         var squareHeight = (document.getElementById("square-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-height") as HTMLInputElement).value : 1;
@@ -131,12 +144,12 @@ export class ThreePhysicsComponent extends Scene3D {
             depth: Number(squareLength),
           },
           {
-            phong: { color: color },
+            phong: { color: color },  
           }
         );
         this.physics.add.existing(box);
         box.body.setBounciness(bounce)
-        box.body.setGravity(0, mass, 0)
+        box.body.setGravity(0, gravity, 0)
         box.body.setFriction(friction)
         box.body.setCollisionFlags(Number(objectType))
       }
@@ -144,10 +157,11 @@ export class ThreePhysicsComponent extends Scene3D {
         var circleRadius = ((document.getElementById("circle-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-radius") as HTMLInputElement).value : 1);
         const ball = this.physics.add.sphere(
           { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(circleRadius), heightSegments: 16, widthSegments: 16 },
-          { phong: { color: color } }
+          { phong: { color: color }, 
+        }
         );
         ball.body.setBounciness(bounce)
-        ball.body.setGravity(0, mass, 0)
+        ball.body.setGravity(0, gravity, 0)
         ball.body.setFriction(friction)
         ball.body.setCollisionFlags(Number(objectType))
 
@@ -165,12 +179,11 @@ export class ThreePhysicsComponent extends Scene3D {
           height: Number(height)
         }, {
           phong: { color: color },
-          compound: true,
-        });
+          compound: true,        });
 
-        this.physics.add.existing(cylinder, { shape: "convex", mass: 100 })
+        this.physics.add.existing(cylinder, { shape: "convex"})
         cylinder.body.setBounciness(bounce);
-        cylinder.body.setGravity(0, mass, 0);
+        cylinder.body.setGravity(0, gravity, 0);
         cylinder.body.setFriction(friction);
         cylinder.body.setCollisionFlags(Number(objectType))
       }
@@ -178,7 +191,6 @@ export class ThreePhysicsComponent extends Scene3D {
   }
 }
 
-// set your project configs
 const config = {
   scenes: [ThreePhysicsComponent],
   antialias: true,
@@ -209,20 +221,21 @@ document.getElementById("options-menu")?.addEventListener("change", (element) =>
     }
   }
 })
-document.getElementById("map")?.addEventListener("change", (element) => {
-  var currentMap = (element.target as HTMLSelectElement).options[(element.target as HTMLSelectElement).selectedIndex].value
-  loadMap(currentMap)
-})
-function loadMap(mapNumber) {
-  if (mapNumber === 0) {
-  }
-  else if (mapNumber === 1) {
+// document.getElementById("map")?.addEventListener("change", (element) => {
+//   var currentMap = (element.target as HTMLSelectElement).options[(element.target as HTMLSelectElement).selectedIndex].value
+//   loadMap(currentMap)
+// })
+// function loadMap(mapNumber) {
+//   if (mapNumber === 0) {
 
-  }
-  else if (mapNumber === 2) {
+//   }
+//   else if (mapNumber === 1) {
 
-  }
-}
+//   }
+//   else if (mapNumber === 2) {
+
+//   }
+// }
 
 
 

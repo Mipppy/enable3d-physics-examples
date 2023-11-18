@@ -14,7 +14,8 @@
     <h3 id="selected-object">Square</h3>
     <div class="editor" name="square">
       <h6 class="label">Width</h6>
-      <input type="number" id="square-width" min="0" onkeyup="enforceMinMax(this)"> <!--Has to have class editor or it will not show correctly-->
+      <input type="number" id="square-width" min="0" onkeyup="enforceMinMax(this)">
+      <!--Has to have class editor or it will not show correctly-->
       <h6 class="label">Height</h6>
       <input type="number" id="square-height" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Depth</h6>
@@ -36,7 +37,7 @@
       <h6 class="label">Height</h6>
       <input type="number" id="cylinder-height" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Radial Segments</h6>
-      <input type="number" id="cylinder-segments" min="0" onkeyup="enforceMinMax(this)">  
+      <input type="number" id="cylinder-segments" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Start on side</h6>
       <input type="checkbox" id="cylinder-start-on-side">
     </div>
@@ -53,15 +54,15 @@
       <input type="number" id="torus-radius" min="0" max="100" onkeyup="enforceMinMax(this)">
     </div>
     <div>
-    <h6 class="label">Color</h6>
-    <input type="color" id="color" onkeyup="enforceMinMax(this)">
-    <h6 class="label">Gravity</h6>
-    <input type="number" min="-1000" id="gravity" max="1000" onkeyup="enforceMinMax(this)">
-    <h6 class="label">Bounce</h6>
-    <input type="number" min="-1000" id="bounce" max="1000" onkeyup="enforceMinMax(this)">
-    <h6 class="label">Friction</h6>
-    <input type="number" min="-1000" max="1000" id="friction" onkeyup="enforceMinMax(this)">
-    <h6 class="label">Type</h6>
+      <h6 class="label">Color</h6>
+      <input type="color" id="color" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Gravity</h6>
+      <input type="number" min="-1000" id="gravity" max="1000" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Bounce</h6>
+      <input type="number" min="-1000" id="bounce" max="1000" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Friction</h6>
+      <input type="number" min="-1000" max="1000" id="friction" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Type</h6>
     </div>
     <select id="object-type">
       <option value="0">Dynamic</option>
@@ -83,22 +84,66 @@
         <option value="1">Slope</option>
         <option value="2">Mountain</option>
       </select>
-      <button>?</button>
+      <button onclick="openHelpMenu()" class="open-help-menu">?</button>
+    </div>
+  </div>
+  <div id="help-menu">
+    <button onclick="openHelpMenu()" class="close-help-menu">X</button>
+    <div class="tab">
+      <button class="help-menu-tabs" onclick="openTab('help-tab-main')">Main</button>
+      <button class="help-menu-tabs" onclick="openTab('help-tab-properties')">Properties</button>
+      <button class="help-menu-tabs" onclick="openTab('help-tab-faq')">FAQ</button>
+    </div>
+    <div class="help-tab-main tab-menu">
+      
+    </div>
+    <div class="help-tab-properties tab-menu">
+
+    </div>
+    <div class="help-tab-faq tab-menu">
+
     </div>
   </div>
 </body>
 <script src="./index.js"></script>
 <script>
-  function enforceMinMax(element) {
-  if (element.value != "") {
-    if (parseInt(element.value) < parseInt(element.min)) {
-      element.value = element.min;
-    }
-    if (parseInt(element.value) > parseInt(element.max)) {
-      element.value = element.max;
+  openTab('help-tab-main')
+  function openTab(tab) {
+    hideTabs()
+    tabsToOpen = document.getElementsByClassName(tab)
+    for (let i = 0; i < tabsToOpen.length; i++) {
+      tabsToOpen[i].style.display = 'block'
+    } 
+  }
+  function hideTabs () {
+    tabs = document.getElementsByClassName('tab-menu')
+    for (let i = 0; i < tabs.length; i++) {
+      tabs[i].style.display = 'none';
     }
   }
-}
+
+
+  var helpMenuOpenBool = false
+  function openHelpMenu() {
+    if (!helpMenuOpenBool) {
+      document.getElementById("help-menu").style.display = "block"
+      helpMenuOpenBool = true
+    } else {
+      document.getElementById("help-menu").style.display = "none"
+      helpMenuOpenBool = false
+    }
+  }
+
+  function enforceMinMax(element) {
+    if (element.value != "") {
+      if (parseInt(element.value) < parseInt(element.min)) {
+        element.value = element.min;
+      }
+      if (parseInt(element.value) > parseInt(element.max)) {
+        element.value = element.max;
+      }
+    }
+  }
 </script>
 
 </html>

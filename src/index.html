@@ -34,10 +34,25 @@
       <h6 class="label">Bottom Radius</h6>
       <input type="number" id="bottom-radius" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Height</h6>
-      <input type="number" id="cylinder-height" min="0" onkeyup="enforceMinMax(this)"> 
+      <input type="number" id="cylinder-height" min="0" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Radial Segments</h6>
+      <input type="number" id="cylinder-segments" min="0" onkeyup="enforceMinMax(this)">  
       <h6 class="label">Start on side</h6>
       <input type="checkbox" id="cylinder-start-on-side">
     </div>
+    <div class="editor" name="torus">
+      <h6 class="label">Start on side</h6>
+      <input type="checkbox" id="torus-start-on-side">
+      <h6 class="label">Tube</h6>
+      <input type="number" id="torus-tube" min="0" max="10" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Radial Segments</h6>
+      <input type="number" id="torus-radial-segments" min="0" max="100" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Tubular Segments</h6>
+      <input type="number" id="torus-tubular-segments" min="0" max="100" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Radius</h6>
+      <input type="number" id="torus-radius" min="0" max="100" onkeyup="enforceMinMax(this)">
+    </div>
+    <div>
     <h6 class="label">Color</h6>
     <input type="color" id="color" onkeyup="enforceMinMax(this)">
     <h6 class="label">Gravity</h6>
@@ -47,6 +62,7 @@
     <h6 class="label">Friction</h6>
     <input type="number" min="-1000" max="1000" id="friction" onkeyup="enforceMinMax(this)">
     <h6 class="label">Type</h6>
+    </div>
     <select id="object-type">
       <option value="0">Dynamic</option>
       <option value="1">Static</option>
@@ -60,6 +76,7 @@
         <option value="0">Square</option>
         <option value="1">Circle</option>
         <option value="2">Cylinder</option>
+        <option value="3">TORUS</option>
       </select>
       <select name="map" id="map">
         <option value="0">Default</option>

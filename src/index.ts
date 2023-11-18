@@ -278,6 +278,8 @@ export class ThreePhysicsComponent extends Scene3D {
         var bottomRadius = (document.getElementById("bottom-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("bottom-radius") as HTMLInputElement).value : 1;
         var topRadius = ((document.getElementById("top-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("top-radius") as HTMLInputElement).value : 1);
         var startOnSideBool = ((document.getElementById("cylinder-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-start-on-side") as HTMLInputElement).checked : false);
+        var radialSegments= ((document.getElementById("cylinder-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-segments") as HTMLInputElement).value : 12);
+
         const cylinder = this.add.cylinder({
           x: intersectionPoint.x,
           y: intersectionPoint.y,
@@ -285,6 +287,7 @@ export class ThreePhysicsComponent extends Scene3D {
           radiusTop: Number(topRadius),
           radiusBottom: Number(bottomRadius),
           height: Number(height),
+          radiusSegments: Number(radialSegments),
         }, {
           phong: { color: color },
           compound: true,
@@ -297,6 +300,25 @@ export class ThreePhysicsComponent extends Scene3D {
         cylinder.body.setGravity(0, gravity, 0);
         cylinder.body.setFriction(friction);
         cylinder.body.setCollisionFlags(Number(objectType))
+      }
+      else if (e?.selectedIndex ===3) {
+        var startOnSideBool = ((document.getElementById("torus-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-start-on-side") as HTMLInputElement).checked : false);
+        var radialSegments = ((document.getElementById("torus-tubular-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-tubular-segments") as HTMLInputElement).value : 12);
+        var tubularSegments = ((document.getElementById("torus-radial-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-radial-segments") as HTMLInputElement).value : 12);
+        var radius = ((document.getElementById("torus-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-radius") as HTMLInputElement).value : 1);
+        var tube = ((document.getElementById("torus-tube") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-tube") as HTMLInputElement).value : 0.2);
+        let torus = this.add.torus(
+          { x:intersectionPoint.x ,y: intersectionPoint.y+2, z: intersectionPoint.z, tube: Number(tube), radialSegments: Number(radialSegments), tubularSegments: Number(tubularSegments), radius: Number(radius)  },
+          { lambert: { color: color }, },
+        );
+        if (startOnSideBool) {
+          torus.rotateX(-80)
+        }
+        this.physics.add.existing(torus, {shape: "convex"})
+        torus.body.setBounciness(bounce);
+        torus.body.setGravity(0, gravity, 0);
+        torus.body.setFriction(friction);
+        torus.body.setCollisionFlags(Number(objectType))
       }
     }
   }
@@ -329,6 +351,12 @@ document.getElementById("options-menu")?.addEventListener("change", (element) =>
     var cylinderElements = document.getElementsByName("cylinder")
     for (let i = 0; i < cylinderElements.length; i++) {
       cylinderElements[i].style.display = "inline-block"
+    }
+  }
+  else if ((element.target as HTMLSelectElement).selectedIndex === 3) {
+    var torusElements = document.getElementsByName("torus")
+    for (let i = 0; i < torusElements.length; i++) {
+      torusElements[i].style.display = "inline-block"
     }
   }
 })

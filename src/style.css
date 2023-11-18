@@ -56,10 +56,12 @@ body {
 input {
     width: 23px;
     display: inline-block;
+    margin-left: 10px;
 }
 .label {
     display: inline-block;
     margin: 0;
+    margin-left: 10px;
 }
 #selected-object {
     text-align: center;
@@ -74,4 +76,16 @@ input[type=number] {
   }
   input[type=checkbox] {
     margin: 0;
+  }
+  div {
+    overflow: scroll;
+  }
+  div::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .div {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }

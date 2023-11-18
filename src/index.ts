@@ -1,11 +1,11 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Scene3D, PhysicsLoader, Project, ExtendedObject3D } from "enable3d";
 import * as THREE from "three";
-
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 var frames = 0;
 var startTime = performance.now();
 var fpsElement = document.getElementById("fps")!;
-let mouse, raycaster, map, previousMap, slope0, slope1, slope2, slope3;
+let mouse, raycaster, map, previousMap, slope0, slope1, slope2, slope3,slopePlane;
 export class ThreePhysicsComponent extends Scene3D {
   constructor() {
     super();
@@ -124,6 +124,11 @@ export class ThreePhysicsComponent extends Scene3D {
         this.physics.add.existing(slope3, { mass: 0, collisionFlags: 1 });
         slope3.body.setFriction(1);
         slope3.body.setBounciness(1)
+        slopePlane = this.add.box({ width: 21, depth: 21 });
+        slopePlane.position.set(-30, -20, 0);
+        this.physics.add.existing(slopePlane, { mass: 0, collisionFlags: 1 });
+        slopePlane.body.setFriction(1);
+        slopePlane.body.setBounciness(1)
       }
       else if (currentMap === 2) {
 
@@ -206,18 +211,21 @@ export class ThreePhysicsComponent extends Scene3D {
         var height = (document.getElementById("cylinder-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-height") as HTMLInputElement).value : 2;
         var bottomRadius = (document.getElementById("bottom-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("bottom-radius") as HTMLInputElement).value : 1;
         var topRadius = ((document.getElementById("top-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("top-radius") as HTMLInputElement).value : 1);
+        var startOnSideBool = ((document.getElementById("cylinder-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-start-on-side") as HTMLInputElement).checked: false);
         const cylinder = this.add.cylinder({
           x: intersectionPoint.x,
           y: intersectionPoint.y,
           z: intersectionPoint.z,
           radiusTop: Number(topRadius),
           radiusBottom: Number(bottomRadius),
-          height: Number(height)
+          height: Number(height),
         }, {
           phong: { color: color },
           compound: true,
         });
-
+        if (startOnSideBool) {
+          cylinder.rotateX(-80)
+        }
         this.physics.add.existing(cylinder, { shape: "convex" })
         cylinder.body.setBounciness(bounce);
         cylinder.body.setGravity(0, gravity, 0);

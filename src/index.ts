@@ -5,7 +5,7 @@ import * as THREE from "three";
 var frames = 0;
 var startTime = performance.now();
 var fpsElement = document.getElementById("fps")!;
-let mouse, raycaster, map;
+let mouse, raycaster, map, previousMap, slope0, slope1, slope2, slope3;
 export class ThreePhysicsComponent extends Scene3D {
   constructor() {
     super();
@@ -79,21 +79,47 @@ export class ThreePhysicsComponent extends Scene3D {
       "click",
       this.onMouseClick.bind(this)
     );
-    setInterval(()=> {
-      this.getAndSwitchMap.bind(this)
-    },1000)
   }
+
   getAndSwitchMap() {
     var currentMap = Number((document.getElementById("map") as HTMLSelectElement).options[(document.getElementById("map") as HTMLSelectElement).selectedIndex].value)
-    if (currentMap === 0) {
-
+    if (previousMap !== currentMap) {
+      if (currentMap === 0) {
+        try {
+          this.destroy(slope0)
+          this.physics.destroy(slope0);
+          this.destroy(slope1)
+          this.physics.destroy(slope1)
+          this.destroy(slope2)
+          this.physics.destroy(slope2)
+        } catch(err) {
+         void(0)
+        }
+      } else if (currentMap === 1) {
+        slope0 = this.add.box({ width: 21, depth: 21 });
+        slope0.position.set(20, 4, 0);
+        slope0.rotateZ(Math.PI / 8);
+        this.physics.add.existing(slope0, { mass: 0, collisionFlags: 1 });
+        slope0.body.setFriction(1);
+        slope0.body.setBounciness(1)
+        slope1 = this.add.box({ width: 21, depth: 21 });
+        slope1.position.set(0, 7, -18);
+        slope1.rotateX(Math.PI / 4);
+        this.physics.add.existing(slope1, { mass: 0, collisionFlags: 1 });
+        slope1.body.setFriction(1);
+        slope1.body.setBounciness(1)
+        slope2 = this.add.box({ width: 21, depth: 21 });
+        slope2.position.set(0, 2, 20);
+        slope2.rotateX(Math.PI / -20);
+        this.physics.add.existing(slope2, { mass: 0, collisionFlags: 1 });
+        slope2.body.setFriction(1);
+        slope2.body.setBounciness(1)
+      }
+      else if (currentMap === 2) {
+        
+      }
     }
-    else if(currentMap === 1) {
-
-    }
-    else if (currentMap === 2) {
-
-    }
+    previousMap = currentMap;
   }
   update() {
     const currentTime = performance.now();
@@ -104,6 +130,7 @@ export class ThreePhysicsComponent extends Scene3D {
 
     // Update FPS every second
     if (deltaTime >= 1000) {
+      this.getAndSwitchMap()
       const fps = Math.round((frames * 1000) / deltaTime);
       fpsElement.textContent = `FPS: ${fps}`;
 
@@ -112,6 +139,7 @@ export class ThreePhysicsComponent extends Scene3D {
       startTime = currentTime;
     }
   }
+
   onMouseClick(event) {
     var e = document.getElementById("options-menu") as HTMLSelectElement | null;
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -144,7 +172,7 @@ export class ThreePhysicsComponent extends Scene3D {
             depth: Number(squareLength),
           },
           {
-            phong: { color: color },  
+            phong: { color: color },
           }
         );
         this.physics.add.existing(box);
@@ -157,13 +185,14 @@ export class ThreePhysicsComponent extends Scene3D {
         var circleRadius = ((document.getElementById("circle-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-radius") as HTMLInputElement).value : 1);
         var circleWidthSegments = ((document.getElementById("circle-width-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-width-segments") as HTMLInputElement).value : 16);
         var circleHeightSegments = ((document.getElementById("circle-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-height-segments") as HTMLInputElement).value : 16);
-        
+
         const ball = this.add.sphere(
           { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(circleRadius), heightSegments: Number(circleHeightSegments), widthSegments: Number(circleWidthSegments) },
-          { phong: { color: color }, 
-        }
+          {
+            phong: { color: color },
+          }
         );
-        this.physics.add.existing(ball, {shape: "convex"})
+        this.physics.add.existing(ball, { shape: "convex" })
         ball.body.setBounciness(bounce)
         ball.body.setGravity(0, gravity, 0)
         ball.body.setFriction(friction)
@@ -182,9 +211,10 @@ export class ThreePhysicsComponent extends Scene3D {
           height: Number(height)
         }, {
           phong: { color: color },
-          compound: true,        });
+          compound: true,
+        });
 
-        this.physics.add.existing(cylinder, { shape: "convex"})
+        this.physics.add.existing(cylinder, { shape: "convex" })
         cylinder.body.setBounciness(bounce);
         cylinder.body.setGravity(0, gravity, 0);
         cylinder.body.setFriction(friction);
@@ -224,21 +254,6 @@ document.getElementById("options-menu")?.addEventListener("change", (element) =>
     }
   }
 })
-// document.getElementById("map")?.addEventListener("change", (element) => {
-//   var currentMap = (element.target as HTMLSelectElement).options[(element.target as HTMLSelectElement).selectedIndex].value
-//   loadMap(currentMap)
-// })
-// function loadMap(mapNumber) {
-//   if (mapNumber === 0) {
-
-//   }
-//   else if (mapNumber === 1) {
-
-//   }
-//   else if (mapNumber === 2) {
-
-//   }
-// }
 
 
 
@@ -257,6 +272,3 @@ function getObjectType() {
   var objectType = (document.getElementById('object-type') as HTMLSelectElement).options[(document.getElementById("object-type") as HTMLSelectElement).selectedIndex].value;
   return objectType;
 }
-
-
-

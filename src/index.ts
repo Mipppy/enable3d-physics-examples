@@ -92,10 +92,14 @@ export class ThreePhysicsComponent extends Scene3D {
           this.physics.destroy(slope1)
           this.destroy(slope2)
           this.physics.destroy(slope2)
-        } catch(err) {
-         void(0)
+          this.destroy(slope3)
+          this.physics.destroy(slope3)
+          this.camera.position.set(13, 10, 23);
+        } catch (err) {
+          void (0)
         }
       } else if (currentMap === 1) {
+        this.camera.position.set(28, 25, 38);
         slope0 = this.add.box({ width: 21, depth: 21 });
         slope0.position.set(20, 4, 0);
         slope0.rotateZ(Math.PI / 8);
@@ -114,9 +118,15 @@ export class ThreePhysicsComponent extends Scene3D {
         this.physics.add.existing(slope2, { mass: 0, collisionFlags: 1 });
         slope2.body.setFriction(1);
         slope2.body.setBounciness(1)
+        slope3 = this.add.box({ width: 21, depth: 21 });
+        slope3.position.set(-18, -8, 0);
+        slope3.rotateZ(-150);
+        this.physics.add.existing(slope3, { mass: 0, collisionFlags: 1 });
+        slope3.body.setFriction(1);
+        slope3.body.setBounciness(1)
       }
       else if (currentMap === 2) {
-        
+
       }
     }
     previousMap = currentMap;
@@ -124,17 +134,12 @@ export class ThreePhysicsComponent extends Scene3D {
   update() {
     const currentTime = performance.now();
     const deltaTime = currentTime - startTime;
-
-    // Increment frame count
     frames++;
-
-    // Update FPS every second
     if (deltaTime >= 1000) {
       this.getAndSwitchMap()
       const fps = Math.round((frames * 1000) / deltaTime);
       fpsElement.textContent = `FPS: ${fps}`;
 
-      // Reset variables for the next second
       frames = 0;
       startTime = currentTime;
     }
@@ -157,7 +162,6 @@ export class ThreePhysicsComponent extends Scene3D {
       var gravity = Number((document.getElementById("gravity") as HTMLInputElement).value !== "" ? (document.getElementById("gravity") as HTMLInputElement).value : -10)
       var bounce = Number((document.getElementById("bounce") as HTMLInputElement).value !== "" ? (document.getElementById("bounce") as HTMLInputElement).value : 0) / 100
       var friction = Number((document.getElementById("friction") as HTMLInputElement).value !== "" ? (document.getElementById("friction") as HTMLInputElement).value : 50) / 100
-      console.log(`Bounce: ${bounce}, Gravity: ${gravity}, Friction: ${friction}`)
       if (e?.selectedIndex === 0) {
         var squareWidth = (document.getElementById("square-width") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-width") as HTMLInputElement).value : 1;
         var squareHeight = (document.getElementById("square-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-height") as HTMLInputElement).value : 1;

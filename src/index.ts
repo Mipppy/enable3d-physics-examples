@@ -1,11 +1,11 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Scene3D, PhysicsLoader, Project, ExtendedObject3D } from "enable3d";
 import * as THREE from "three";
-type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 var frames = 0;
 var startTime = performance.now();
 var fpsElement = document.getElementById("fps")!;
-let mouse, raycaster, map, previousMap, slope0, slope1, slope2, slope3,slopePlane;
+let mouse, raycaster, map, previousMap, slope0, slope1, slope2, slope3, slopePlane;
+let mountainPiece1, mountainPiece2, mountainPiece3, mountainPiece4,mountainPiece5
 export class ThreePhysicsComponent extends Scene3D {
   constructor() {
     super();
@@ -22,13 +22,14 @@ export class ThreePhysicsComponent extends Scene3D {
   async preload() { }
 
   async create() {
-    // map = this.physics.add.ground({ width: 40, height: 40 })
-
+    map = this.physics.add.ground({ width: 21, height: 21 })
+    map.body.setFriction(1)
+    map.body.setBounciness(1)
     // set up scene (light, ground, grid, sky, orbitControls)
-    this.warpSpeed();
+    this.warpSpeed("-ground");
     // position camera
-    this.camera.position.set(13, 10, 23);
-
+    this.camera.position.set(17, 11, 22);
+    this.camera.rotation.set(-0.521859351223322, 0.6624499805017356, 0.3399445956672308,)
     //this.haveSomeFun()
     // enable physics debug
     if (this.physics.debug) {
@@ -40,26 +41,7 @@ export class ThreePhysicsComponent extends Scene3D {
       { lambert: { color: "orange" } }
     );
     torus1.body.applyForceX(5);
-    // //gltf loader
-    // new GLTFLoader().loadAsync("/fountain.glb").then((gltf) => {
-    //   const duck: any = gltf.scene.children[0];
-    //   duck.position.y += 1;
-    //   duck.scale.set(1.05, 1.05, 1.05);
-    //   const object = new ExtendedObject3D();
-    //   object.add(duck);
-    //   object.position.z = 6;
-    //   this.add.existing(object);
-    //   this.physics.add.existing(object, {
-    //     shape: "box",
-    //     width: 2,
-    //     height: 2,
-    //     depth: 2,
-    //   });
-    //   // duck.position.z = 6
-    //   // this.scene.add(duck as any)
-    //   // this.physics.add.existing(duck, { shape: 'convex'})
-    // });
-
+    //gltf loader
     const ball = this.physics.add.sphere(
       { x: -200, y: 20, radius: 3, heightSegments: 16, widthSegments: 16 },
       { phong: { color: "black" } }
@@ -83,8 +65,10 @@ export class ThreePhysicsComponent extends Scene3D {
 
   getAndSwitchMap() {
     var currentMap = Number((document.getElementById("map") as HTMLSelectElement).options[(document.getElementById("map") as HTMLSelectElement).selectedIndex].value)
+    console.log(currentMap)
     if (previousMap !== currentMap) {
       if (currentMap === 0) {
+        map = this.physics.add.ground({ width: 21, height: 21 })
         try {
           this.destroy(slope0)
           this.physics.destroy(slope0);
@@ -94,12 +78,32 @@ export class ThreePhysicsComponent extends Scene3D {
           this.physics.destroy(slope2)
           this.destroy(slope3)
           this.physics.destroy(slope3)
-          this.camera.position.set(13, 10, 23);
+          this.destroy(slopePlane)
+          this.physics.destroy(slopePlane)
+
         } catch (err) {
           void (0)
         }
+        try {
+          this.destroy(mountainPiece1)
+          this.physics.destroy(mountainPiece1)
+          this.destroy(mountainPiece2)
+          this.physics.destroy(mountainPiece2)
+          this.destroy(mountainPiece3)
+          this.physics.destroy(mountainPiece3)
+          this.destroy(mountainPiece4)
+          this.physics.destroy(mountainPiece4)
+          this.destroy(mountainPiece5)
+          this.physics.destroy(mountainPiece5)
+          this.camera.position.set(17, 11, 22);
+          this.camera.rotation.set(-0.521859351223322, 0.6624499805017356, 0.3399445956672308,)
+        }
+        catch( err) {
+          void(0)
+        }
       } else if (currentMap === 1) {
-        this.camera.position.set(28, 25, 38);
+        this.camera.position.set(27, 21, 32);
+        this.camera.rotation.set(-0.521859351223322, 0.6624499805017356, 0.3399445956672308,)
         slope0 = this.add.box({ width: 21, depth: 21 });
         slope0.position.set(20, 4, 0);
         slope0.rotateZ(Math.PI / 8);
@@ -129,9 +133,73 @@ export class ThreePhysicsComponent extends Scene3D {
         this.physics.add.existing(slopePlane, { mass: 0, collisionFlags: 1 });
         slopePlane.body.setFriction(1);
         slopePlane.body.setBounciness(1)
+        try {
+          this.destroy(mountainPiece1)
+          this.physics.destroy(mountainPiece1)
+          this.destroy(mountainPiece2)
+          this.physics.destroy(mountainPiece2)
+          this.destroy(mountainPiece3)
+          this.physics.destroy(mountainPiece3)
+          this.destroy(mountainPiece4)
+          this.physics.destroy(mountainPiece4)
+          this.destroy(mountainPiece5)
+          this.physics.destroy(mountainPiece5)
+          this.camera.position.set(17, 11, 22);
+          this.camera.rotation.set(-0.521859351223322, 0.6624499805017356, 0.3399445956672308,)
+        }
+        catch( err) {
+          void(0)
+        }
       }
       else if (currentMap === 2) {
+         mountainPiece1 = this.add.sphere(
+          { x: 13, y: 0, z: 0, radius: Number(5), heightSegments: Number(1), widthSegments: Number(1) },
+          {
+            phong: { color: "green" },
+          }
+        );
+        this.physics.add.existing(mountainPiece1, { shape: "convex" })
+        mountainPiece1.body.setCollisionFlags(2)
+        mountainPiece2 = this.add.sphere(
+          { x: 2, y: 1, z: 0, radius: Number(13), heightSegments: Number(1), widthSegments: Number(5) },
+          {
+            phong: { color: "green" },
+          }
+        );
+        this.physics.add.existing(mountainPiece2, { shape: "convex" })
+        mountainPiece2.body.setCollisionFlags(2)
+        mountainPiece3 = this.add.sphere(
+          { x: -2, y: 6, z: -3, radius: Number(3), heightSegments: Number(6), widthSegments: Number(4) },
+          {
+            phong: { color: "green" },
+          }
+        );
+        this.physics.add.existing(mountainPiece3, { shape: "convex" })
+        mountainPiece3.body.setCollisionFlags(2)
+        mountainPiece4 = this.add.sphere(
+          { x: 6, y: 3, z: 5, radius: Number(6), heightSegments: Number(1), widthSegments: Number(5) },
+          {
+            phong: { color: "green" },
+          }
+        );
+        this.physics.add.existing(mountainPiece4, { shape: "convex" })
+        mountainPiece4.body.setCollisionFlags(2)
+        mountainPiece5= this.physics.add.ground({ width: 40, height: 40 })
+        try {
+          this.destroy(slope0)
+          this.physics.destroy(slope0);
+          this.destroy(slope1)
+          this.physics.destroy(slope1)
+          this.destroy(slope2)
+          this.physics.destroy(slope2)
+          this.destroy(slope3)
+          this.physics.destroy(slope3)
+          this.destroy(slopePlane)
+          this.physics.destroy(slopePlane)
 
+        } catch (err) {
+          void (0)
+        }
       }
     }
     previousMap = currentMap;
@@ -211,7 +279,7 @@ export class ThreePhysicsComponent extends Scene3D {
         var height = (document.getElementById("cylinder-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-height") as HTMLInputElement).value : 2;
         var bottomRadius = (document.getElementById("bottom-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("bottom-radius") as HTMLInputElement).value : 1;
         var topRadius = ((document.getElementById("top-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("top-radius") as HTMLInputElement).value : 1);
-        var startOnSideBool = ((document.getElementById("cylinder-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-start-on-side") as HTMLInputElement).checked: false);
+        var startOnSideBool = ((document.getElementById("cylinder-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-start-on-side") as HTMLInputElement).checked : false);
         const cylinder = this.add.cylinder({
           x: intersectionPoint.x,
           y: intersectionPoint.y,

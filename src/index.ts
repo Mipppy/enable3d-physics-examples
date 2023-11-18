@@ -257,3 +257,6 @@ function getObjectType() {
   var objectType = (document.getElementById('object-type') as HTMLSelectElement).options[(document.getElementById("object-type") as HTMLSelectElement).selectedIndex].value;
   return objectType;
 }
+
+
+

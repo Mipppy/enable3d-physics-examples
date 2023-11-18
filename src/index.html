@@ -14,36 +14,36 @@
     <h3 id="selected-object">Square</h3>
     <div class="editor" name="square">
       <h6 class="label">Width</h6>
-      <input type="number" id="square-width" min="0"> <!--Has to have class editor or it will not show correctly-->
+      <input type="number" id="square-width" min="0" onkeyup="enforceMinMax(this)"> <!--Has to have class editor or it will not show correctly-->
       <h6 class="label">Height</h6>
-      <input type="number" id="square-height" min="0">
+      <input type="number" id="square-height" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Depth</h6>
-      <input type="number" id="square-length" min="0">
+      <input type="number" id="square-length" min="0" onkeyup="enforceMinMax(this)">
     </div>
     <div class="editor" name="circle">
       <h6 class="label">Radius</h6>
-      <input type="number" id="circle-radius" min="0">
+      <input type="number" id="circle-radius" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Width Segments</h6>
-      <input type="number" min="5" max="100" id="circle-width-segments">
+      <input type="number" min="0" max="100" id="circle-width-segments" onkeyup="enforceMinMax(this)">
       <h6 class="label">Height Segments</h6>
-      <input type="number" min="5" max="100" id="circle-height-segments">
+      <input type="number" min="0" max="100" id="circle-height-segments" onkeyup="enforceMinMax(this)">
     </div>
     <div class="editor" name="cylinder">
       <h6 class="label">Top Radius</h6>
-      <input type="number" id="top-radius" min="0">
+      <input type="number" id="top-radius" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Bottom Radius</h6>
-      <input type="number" id="bottom-radius" min="0">
+      <input type="number" id="bottom-radius" min="0" onkeyup="enforceMinMax(this)">
       <h6 class="label">Height</h6>
-      <input type="number" id="cylinder-height" min="0"> 
+      <input type="number" id="cylinder-height" min="0" onkeyup="enforceMinMax(this)"> 
     </div>
     <h6 class="label">Color</h6>
-    <input type="color" id="color">
+    <input type="color" id="color" onkeyup="enforceMinMax(this)">
     <h6 class="label">Gravity</h6>
-    <input type="number" min="-1000" id="gravity" max="1000">
+    <input type="number" min="-1000" id="gravity" max="1000" onkeyup="enforceMinMax(this)">
     <h6 class="label">Bounce</h6>
-    <input type="number" min="-1000" id="bounce" max="1000">
+    <input type="number" min="-1000" id="bounce" max="1000" onkeyup="enforceMinMax(this)">
     <h6 class="label">Friction</h6>
-    <input type="number" min="-1000" max="1000" id="friction">
+    <input type="number" min="-1000" max="1000" id="friction" onkeyup="enforceMinMax(this)">
     <h6 class="label">Type</h6>
     <select id="object-type">
       <option value="0">Dynamic</option>
@@ -68,5 +68,17 @@
   </div>
 </body>
 <script src="./index.js"></script>
+<script>
+  function enforceMinMax(element) {
+  if (element.value != "") {
+    if (parseInt(element.value) < parseInt(element.min)) {
+      element.value = element.min;
+    }
+    if (parseInt(element.value) > parseInt(element.max)) {
+      element.value = element.max;
+    }
+  }
+}
+</script>
 
 </html>

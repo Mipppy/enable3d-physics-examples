@@ -155,16 +155,19 @@ export class ThreePhysicsComponent extends Scene3D {
       }
       else if (e?.selectedIndex === 1) {
         var circleRadius = ((document.getElementById("circle-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-radius") as HTMLInputElement).value : 1);
-        const ball = this.physics.add.sphere(
-          { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(circleRadius), heightSegments: 16, widthSegments: 16 },
+        var circleWidthSegments = ((document.getElementById("circle-width-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-width-segments") as HTMLInputElement).value : 16);
+        var circleHeightSegments = ((document.getElementById("circle-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-height-segments") as HTMLInputElement).value : 16);
+        
+        const ball = this.add.sphere(
+          { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(circleRadius), heightSegments: Number(circleHeightSegments), widthSegments: Number(circleWidthSegments) },
           { phong: { color: color }, 
         }
         );
+        this.physics.add.existing(ball, {shape: "convex"})
         ball.body.setBounciness(bounce)
         ball.body.setGravity(0, gravity, 0)
         ball.body.setFriction(friction)
         ball.body.setCollisionFlags(Number(objectType))
-
       }
       else if (e?.selectedIndex === 2) {
         var height = (document.getElementById("cylinder-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-height") as HTMLInputElement).value : 2;

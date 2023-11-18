@@ -41,22 +41,21 @@ export class ThreePhysicsComponent extends Scene3D {
       { lambert: { color: "orange" } }
     );
     torus1.body.applyForceX(5);
-    //gltf loader
-    const ball = this.physics.add.sphere(
-      { x: -200, y: 20, radius: 3, heightSegments: 16, widthSegments: 16 },
-      { phong: { color: "black" } }
-    );
-    ball.body.applyForceX(110);
-    for (let y = 0; y <= 6; y += 2) {
-      for (let z = -6; z <= 6; z += 2) {
-        for (let x = 4; x <= 8; x += 2) {
-          this.physics.add.box(
-            { x, y, z, width: 1.95, height: 1.95, depth: 1.95, mass: 0.3 },
-            { phong: { color: "orange" } }
-          );
-        }
-      }
-    }
+    // const ball = this.physics.add.sphere(
+    //   { x: -200, y: 20, radius: 3, heightSegments: 16, widthSegments: 16 },
+    //   { phong: { color: "black" } }
+    // );
+    // ball.body.applyForceX(110);
+    // for (let y = 0; y <= 6; y += 2) {
+    //   for (let z = -6; z <= 6; z += 2) {
+    //     for (let x = 4; x <= 8; x += 2) {
+    //       this.physics.add.box(
+    //         { x, y, z, width: 1.95, height: 1.95, depth: 1.95, mass: 0.3 },
+    //         { phong: { color: "orange" } }
+    //       );
+    //     }
+    //   }
+    // }
     this.renderer.domElement.addEventListener(
       "click",
       this.onMouseClick.bind(this)
@@ -65,7 +64,6 @@ export class ThreePhysicsComponent extends Scene3D {
 
   getAndSwitchMap() {
     var currentMap = Number((document.getElementById("map") as HTMLSelectElement).options[(document.getElementById("map") as HTMLSelectElement).selectedIndex].value)
-    console.log(currentMap)
     if (previousMap !== currentMap) {
       if (currentMap === 0) {
         map = this.physics.add.ground({ width: 21, height: 21 })

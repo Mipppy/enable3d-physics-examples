@@ -53,6 +53,16 @@
       <h6 class="label">Radius</h6>
       <input type="number" id="torus-radius" min="0" max="100" onkeyup="enforceMinMax(this)">
     </div>
+    <div class="editor" name="cone">
+      <h6 class="label">Radius</h6>
+      <input type="number" min="0" id="cone-radius" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Height</h6>
+      <input type="number" min="0" id="cone-height" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Radial Segments</h6>
+      <input type="number" min="0" id="cone-radial-segments" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Height Segments</h6>
+      <input type="number" min="0" id="cone-height-segments" onkeyup="enforceMinMax(this)">
+    </div>
     <div>
       <h6 class="label">Color</h6>
       <input type="color" id="color" onkeyup="enforceMinMax(this)">
@@ -78,6 +88,7 @@
         <option value="1">Sphere</option>
         <option value="2">Cylinder</option>
         <option value="3">Torus</option>
+        <option value="4">Cone</option>
       </select>
       <select name="map" id="map">
         <option value="0">Default</option>
@@ -92,9 +103,6 @@
     <div class="tab">
       <button class="help-menu-tabs" onclick="openTab('help-tab-properties')">Properties</button>
       <button class="help-menu-tabs" onclick="openTab('help-tab-faq')">FAQ</button>
-    </div>
-    <div class="help-tab-main tab-menu">
-
     </div>
     <div class="help-tab-properties tab-menu">
       <h1>Properties</h1>

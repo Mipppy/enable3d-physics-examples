@@ -313,7 +313,7 @@ export class ThreePhysicsComponent extends Scene3D {
         var radius = ((document.getElementById("torus-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-radius") as HTMLInputElement).value : 1);
         var tube = ((document.getElementById("torus-tube") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-tube") as HTMLInputElement).value : 0.2);
         let torus = this.add.torus(
-          { x:intersectionPoint.x ,y: intersectionPoint.y+2, z: intersectionPoint.z, tube: Number(tube), radialSegments: Number(radialSegments), tubularSegments: Number(tubularSegments), radius: Number(radius)  },
+          { x:intersectionPoint.x ,y: intersectionPoint.y+1, z: intersectionPoint.z, tube: Number(tube), radialSegments: Number(tubularSegments), tubularSegments: Number(radialSegments), radius: Number(radius)  },
           { lambert: { color: color }, },
         );
         if (startOnSideBool) {
@@ -324,6 +324,19 @@ export class ThreePhysicsComponent extends Scene3D {
         torus.body.setGravity(0, gravity, 0);
         torus.body.setFriction(friction);
         torus.body.setCollisionFlags(Number(objectType))
+      }
+      else if (e?.selectedIndex === 4) {
+        var radialSegments = ((document.getElementById("cone-radial-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radial-segments") as HTMLInputElement).value : 12);
+        var heightSegments = ((document.getElementById("cone-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height-segments") as HTMLInputElement).value : 5);
+        var height = ((document.getElementById("cone-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height") as HTMLInputElement).value : 2);
+        var radius = ((document.getElementById("cone-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radius") as HTMLInputElement).value : 1);
+
+        const cone = this.add.cone({x:intersectionPoint.x, y: intersectionPoint.y, z:intersectionPoint.z, radius: Number(radius), height: Number(height), heightSegments: Number(heightSegments), radiusSegments: Number(radialSegments)}, { phong: { color: color } });
+        this.physics.add.existing(cone, {shape: 'convex'})
+        cone.body.setBounciness(bounce);
+        cone.body.setGravity(0, gravity, 0);
+        cone.body.setFriction(friction);
+        cone.body.setCollisionFlags(Number(objectType))
       }
     }
   }
@@ -362,6 +375,12 @@ document.getElementById("options-menu")?.addEventListener("change", (element) =>
     var torusElements = document.getElementsByName("torus")
     for (let i = 0; i < torusElements.length; i++) {
       torusElements[i].style.display = "inline-block"
+    }
+  }
+  else if ((element.target as HTMLSelectElement).selectedIndex === 4) {
+    var coneElements = document.getElementsByName("cone")
+    for (let i = 0; i < coneElements.length; i++) {
+      coneElements[i].style.display = "inline-block"
     }
   }
 })

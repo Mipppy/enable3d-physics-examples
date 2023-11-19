@@ -74,8 +74,8 @@
   <div id="sidebar-container">
     <div id="subcontainer">
       <select name="options" id="options-menu">
-        <option value="0">Square</option>
-        <option value="1">Circle</option>
+        <option value="0">Cube</option>
+        <option value="1">Sphere</option>
         <option value="2">Cylinder</option>
         <option value="3">Torus</option>
       </select>
@@ -95,10 +95,151 @@
       <button class="help-menu-tabs" onclick="openTab('help-tab-faq')">FAQ</button>
     </div>
     <div class="help-tab-main tab-menu">
-      
+
     </div>
     <div class="help-tab-properties tab-menu">
+      <h1>Properties</h1>
+      <p>Properties are the options you set when you summon a shape. They change the physical and interaction view of
+        objects. This menu will explain what each property does.</p>
+      <br>
+      <h3>Global Properties</h3>
+      <p>All objects share these properties</p>
+      <table>
+        <tr>
+          <td><b>Property</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr>
+          <td>Color</td>
+          <td>Sets the color of an object</td>
+        </tr>
+        <tr>
+          <td>Gravity</td>
+          <td>Sets the gravity of an object. Positive numbers will make it fly into the air. Negative numbers will
+            affect how fast it falls or goes down slopes. Setting it to 0 will make it have no gravity.</td>
+        </tr>
+        <tr>
+          <td>Bounce</td>
+          <td>Sets the bounce of an object. Bounce of 100 will make it bounce forever. Bounce above 100 will multiple
+            it's speed by that amount. Negative bounce has strange effects. Try it out!</td>
+        </tr>
+        <tr>
+          <td>Friction</td>
+          <td>Sets the friction of an object. Higher values will make an object stop quicker. Setting it to 0 will make
+            it have no friction and never stop sliding. Negative friction has the same weird effects as Bounce</td>
+        </tr>
+        <tr>
+          <td>Type</td>
+          <td>Sets the type of an object. Dynamic are normal objects that interact with physics. Static object's hitbox
+            can be moved, but the display will stay the same. Kinematic objects are completely stationary and cannot be
+            moved. Ghost objects do not interact with anything</td>
+        </tr>
+      </table>
 
+      <br>
+      <hr>
+      <table>
+        <h3>Cube Properties</h3>
+        <p>All properties for cubes</p>
+        <tr>
+          <td><b>Property</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr>
+          <td>Width</td>
+          <td>Sets the width of the cube</td>
+        </tr>
+        <tr>
+          <td>Height</td>
+          <td>Sets the height of the cube</td>
+        </tr>
+        <tr>
+          <td>Depth</td>
+          <td>Sets the depth of the cube</td>
+        </tr>
+      </table>
+      <br>
+      <hr>
+      <table>
+        <h3>Sphere Properties</h3>
+        <p>All properties for spheres</p>
+        <tr>
+          <td><b>Property</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr>
+          <td>Radius</td>
+          <td>Sets the size of the cube.  Larger radii = Larger spheres</td>
+        </tr>
+        <tr>
+          <td>Width Segments</td>
+          <td>Sets how many horizontal collison detection vertexes there are.  Higher values mean more accurate collison, but it may affect frame rate.  By settings it to low values, such as 3 or 4, you can make different shapes</td>
+        </tr>
+        <tr>
+          <td>Height Segments</td>
+          <td>Sets how many vertical collison detection vertexes there are.  Higher values mean more accurate collison, but it may affect frame rate.  By settings it to low values, such as 3 or 4, you can make different shapes</td>
+        </tr>
+      </table>
+      <br>
+      <hr>
+      <table>
+        <h3>Cylinder Properties</h3>
+        <p>All properties for cylinders</p>
+        <tr>
+          <td><b>Property</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr>
+          <td>Top Radius</td>
+          <td>Sets the top radius of an object. What else?</td>
+        </tr>
+        <tr>
+          <td>Bottom Radius</td>
+          <td>Sets the bottom radius of an object. What else part 2?</td>
+        </tr>
+        <tr>
+          <td>Height</td>
+          <td>Sets the height of an object.  Mix and match with Bottom/Top radius for cool results!</td>
+        </tr>
+        <tr>
+          <td>Cylinder Segments</td>
+          <td>Sets the number of segments of an object.  Higher values mean more accurate collison, but it may affect frame rate.  Setting it to low can result in cool shapes!</td>
+        </tr>
+        <tr>
+          <td>Start on Side</td>
+          <td>Sets if the cylinder should start on it's side.  Useful for placing them on slopes</td>
+        </tr>
+      </table>
+      <br>
+      <hr>
+      <table>
+        <h3>Torus Properties</h3>
+        <p>All properties for toruses</p>
+        <tr>
+          <td><b>Property</b></td>
+          <td><b>Description</b></td>
+        </tr>
+        <tr>
+          <td>Start on Side</td>
+          <td>Sets if the cylinder should start on it's side.  Useful for placing them on slopes</td>        
+        </tr>
+        <tr>
+          <td>Tube</td>
+          <td>Sets how thick the torus should be.  Setting it to a value of 1 will make it filled in</td>
+        </tr>
+        <tr>
+          <td>Radius</td>
+          <td>Sets how wide the torus should be.  Changing this value will not automatically change thickness</td>
+        </tr>
+        <tr>
+          <td>Radial Segments</td>
+          <td>Sets how circular the torus should be.  Higher values will impact performance, and lower values make cool shapes!</td>
+        </tr>
+        <tr>
+          <td>Tubular Segments</td>
+          <td>Sets how circular the side of the torus should be.  It is not recommended to make this value higher as it will impact performance with little to no change in physics. Lower values still make cool shapes :D </td>
+        </tr>
+      </table>
     </div>
     <div class="help-tab-faq tab-menu">
 
@@ -113,9 +254,9 @@
     tabsToOpen = document.getElementsByClassName(tab)
     for (let i = 0; i < tabsToOpen.length; i++) {
       tabsToOpen[i].style.display = 'block'
-    } 
+    }
   }
-  function hideTabs () {
+  function hideTabs() {
     tabs = document.getElementsByClassName('tab-menu')
     for (let i = 0; i < tabs.length; i++) {
       tabs[i].style.display = 'none';

@@ -158,6 +158,7 @@ export class ThreePhysicsComponent extends Scene3D {
         );
         this.physics.add.existing(mountainPiece1, { shape: "convex" })
         mountainPiece1.body.setCollisionFlags(2)
+        mountainPiece1.body.setBounciness(1)
         mountainPiece2 = this.add.sphere(
           { x: 2, y: 1, z: 0, radius: Number(13), heightSegments: Number(1), widthSegments: Number(5) },
           {
@@ -166,6 +167,7 @@ export class ThreePhysicsComponent extends Scene3D {
         );
         this.physics.add.existing(mountainPiece2, { shape: "convex" })
         mountainPiece2.body.setCollisionFlags(2)
+        mountainPiece2.body.setBounciness(1)
         mountainPiece3 = this.add.sphere(
           { x: -2, y: 6, z: -3, radius: Number(3), heightSegments: Number(6), widthSegments: Number(4) },
           {
@@ -174,6 +176,7 @@ export class ThreePhysicsComponent extends Scene3D {
         );
         this.physics.add.existing(mountainPiece3, { shape: "convex" })
         mountainPiece3.body.setCollisionFlags(2)
+        mountainPiece3.body.setBounciness(1)
         mountainPiece4 = this.add.sphere(
           { x: 6, y: 3, z: 5, radius: Number(6), heightSegments: Number(1), widthSegments: Number(5) },
           {
@@ -182,7 +185,9 @@ export class ThreePhysicsComponent extends Scene3D {
         );
         this.physics.add.existing(mountainPiece4, { shape: "convex" })
         mountainPiece4.body.setCollisionFlags(2)
+        mountainPiece4.body.setBounciness(1)
         mountainPiece5= this.physics.add.ground({ width: 40, height: 40 })
+        mountainPiece5.body.setBounciness(1)
         try {
           this.destroy(slope0)
           this.physics.destroy(slope0);

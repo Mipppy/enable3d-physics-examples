@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 html,
 body {
     margin: 0;
@@ -125,6 +126,7 @@ div::-webkit-scrollbar {
     background-color: rgba(91, 91, 91, 0.95);
     border-radius: 25px;
     border: 0.5px groove black;
+    overflow: scroll;
 }
 
 .close-help-menu {
@@ -167,4 +169,21 @@ div::-webkit-scrollbar {
 
 .tab button:hover {
     background-color: rgb(83, 82, 82)
+}
+
+.tab-menu h1, p, h3 {
+    margin-left: 5px;
+    font-family: 'Roboto', serif;
+}
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    margin: none;
+  }
+hr {
+    background-color: black;
+    border: 1px solid black;
+    width: 75%;
+    height: 3px;
 }

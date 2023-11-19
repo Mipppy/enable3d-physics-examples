@@ -90,7 +90,6 @@
   <div id="help-menu">
     <button onclick="openHelpMenu()" class="close-help-menu">X</button>
     <div class="tab">
-      <button class="help-menu-tabs" onclick="openTab('help-tab-main')">Main</button>
       <button class="help-menu-tabs" onclick="openTab('help-tab-properties')">Properties</button>
       <button class="help-menu-tabs" onclick="openTab('help-tab-faq')">FAQ</button>
     </div>
@@ -248,7 +247,7 @@
 </body>
 <script src="./index.js"></script>
 <script>
-  openTab('help-tab-main')
+  openTab('help-tab-properties')
   function openTab(tab) {
     hideTabs()
     tabsToOpen = document.getElementsByClassName(tab)

@@ -355,6 +355,7 @@ export class ThreePhysicsComponent extends Scene3D {
           try {
             if (intersects[i].object !== map && !hasDeletedYet) {
               this.destroy(intersects[i].object)
+              this.physics.destroy(intersects[i].object)
               hasDeletedYet = true;
               break;
             }

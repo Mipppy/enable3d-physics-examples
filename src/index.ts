@@ -327,7 +327,7 @@ export class ThreePhysicsComponent extends Scene3D {
       }
       else if (e?.selectedIndex === 4) {
         var radialSegments = ((document.getElementById("cone-radial-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radial-segments") as HTMLInputElement).value : 12);
-        var heightSegments = ((document.getElementById("cone-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height-segments") as HTMLInputElement).value : 5);
+        var heightSegments = ((document.getElementById("cone-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height-segments") as HTMLInputElement).value : 2);
         var height = ((document.getElementById("cone-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height") as HTMLInputElement).value : 2);
         var radius = ((document.getElementById("cone-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radius") as HTMLInputElement).value : 1);
 

@@ -5,7 +5,7 @@ var frames = 0;
 var startTime = performance.now();
 var fpsElement = document.getElementById("fps")!;
 let mouse, raycaster, map, previousMap, slope0, slope1, slope2, slope3, slopePlane;
-let mountainPiece1, mountainPiece2, mountainPiece3, mountainPiece4,mountainPiece5
+let mountainPiece1, mountainPiece2, mountainPiece3, mountainPiece4, mountainPiece5, deleteToolBool = false;
 export class ThreePhysicsComponent extends Scene3D {
   constructor() {
     super();
@@ -35,7 +35,6 @@ export class ThreePhysicsComponent extends Scene3D {
     if (this.physics.debug) {
       this.physics.debug.enable();
     }
-
     let torus1 = this.physics.add.torus(
       { y: 10, z: 3, tube: 0.2, radialSegments: 16, tubularSegments: 16 },
       { lambert: { color: "orange" } }
@@ -96,8 +95,8 @@ export class ThreePhysicsComponent extends Scene3D {
           this.camera.position.set(17, 11, 22);
           this.camera.rotation.set(-0.521859351223322, 0.6624499805017356, 0.3399445956672308,)
         }
-        catch( err) {
-          void(0)
+        catch (err) {
+          void (0)
         }
       } else if (currentMap === 1) {
         this.camera.position.set(27, 21, 32);
@@ -145,12 +144,12 @@ export class ThreePhysicsComponent extends Scene3D {
           this.camera.position.set(17, 11, 22);
           this.camera.rotation.set(-0.521859351223322, 0.6624499805017356, 0.3399445956672308,)
         }
-        catch( err) {
-          void(0)
+        catch (err) {
+          void (0)
         }
       }
       else if (currentMap === 2) {
-         mountainPiece1 = this.add.sphere(
+        mountainPiece1 = this.add.sphere(
           { x: 13, y: 0, z: 0, radius: Number(5), heightSegments: Number(1), widthSegments: Number(1) },
           {
             phong: { color: "green" },
@@ -186,7 +185,7 @@ export class ThreePhysicsComponent extends Scene3D {
         this.physics.add.existing(mountainPiece4, { shape: "convex" })
         mountainPiece4.body.setCollisionFlags(2)
         mountainPiece4.body.setBounciness(1)
-        mountainPiece5= this.physics.add.ground({ width: 40, height: 40 })
+        mountainPiece5 = this.physics.add.ground({ width: 40, height: 40 })
         mountainPiece5.body.setBounciness(1)
         try {
           this.destroy(slope0)
@@ -228,115 +227,141 @@ export class ThreePhysicsComponent extends Scene3D {
 
     raycaster.setFromCamera(mouse, this.camera);
 
-    // Calculate the intersection point in the 3D space
     const intersects = raycaster.intersectObjects(this.scene.children, true);
 
     if (intersects.length > 0) {
-      const intersectionPoint = intersects[0].point;
-      var objectType = getObjectType()
-      var color = (document.getElementById("color") as HTMLInputElement).value !== "" ? (document.getElementById("color") as HTMLInputElement).value : "#0000ff"
-      var gravity = Number((document.getElementById("gravity") as HTMLInputElement).value !== "" ? (document.getElementById("gravity") as HTMLInputElement).value : -10)
-      var bounce = Number((document.getElementById("bounce") as HTMLInputElement).value !== "" ? (document.getElementById("bounce") as HTMLInputElement).value : 0) / 100
-      var friction = Number((document.getElementById("friction") as HTMLInputElement).value !== "" ? (document.getElementById("friction") as HTMLInputElement).value : 50) / 100
-      if (e?.selectedIndex === 0) {
-        var squareWidth = (document.getElementById("square-width") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-width") as HTMLInputElement).value : 1;
-        var squareHeight = (document.getElementById("square-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-height") as HTMLInputElement).value : 1;
-        var squareLength = ((document.getElementById("square-length") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-length") as HTMLInputElement).value : 1);
-        const box = this.add.box(
-          {
+      if (!deleteToolBool) {
+        const intersectionPoint = intersects[0].point;
+        var objectType = getObjectType()
+        var color = (document.getElementById("color") as HTMLInputElement).value !== "" ? (document.getElementById("color") as HTMLInputElement).value : "#0000ff"
+        var gravity = Number((document.getElementById("gravity") as HTMLInputElement).value !== "" ? (document.getElementById("gravity") as HTMLInputElement).value : -10)
+        var bounce = Number((document.getElementById("bounce") as HTMLInputElement).value !== "" ? (document.getElementById("bounce") as HTMLInputElement).value : 0) / 100
+        var friction = Number((document.getElementById("friction") as HTMLInputElement).value !== "" ? (document.getElementById("friction") as HTMLInputElement).value : 50) / 100
+        var isBreakable = ((document.getElementById("breakable") as HTMLInputElement)?.value !== "" ? (document.getElementById("breakable") as HTMLInputElement).checked : false);
+        var breakableConfig;
+        if (isBreakable) {
+          breakableConfig = {
+            breakable: true,
+            fractureImpulse: ((document.getElementById("fracture-impluse") as HTMLInputElement)?.value !== "" ? (document.getElementById("fracture-impluse") as HTMLInputElement).value : 1),
+          }
+        }
+        else {
+          breakableConfig = {}
+        }
+        if (e?.selectedIndex === 0) {
+          var squareWidth = (document.getElementById("square-width") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-width") as HTMLInputElement).value : 1;
+          var squareHeight = (document.getElementById("square-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-height") as HTMLInputElement).value : 1;
+          var squareLength = ((document.getElementById("square-length") as HTMLInputElement)?.value !== "" ? (document.getElementById("square-length") as HTMLInputElement).value : 1);
+          const box = this.add.box(
+            {
+              x: intersectionPoint.x,
+              y: intersectionPoint.y,
+              z: intersectionPoint.z,
+              width: Number(squareWidth),
+              height: Number(squareHeight),
+              depth: Number(squareLength),
+            },
+            {
+              phong: { color: color },
+            }
+          );
+          this.physics.add.existing(box, { ...breakableConfig });
+          box.body.setBounciness(bounce)
+          box.body.setGravity(0, gravity, 0)
+          box.body.setFriction(friction)
+          box.body.setCollisionFlags(Number(objectType))
+        }
+        else if (e?.selectedIndex === 1) {
+          var circleRadius = ((document.getElementById("circle-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-radius") as HTMLInputElement).value : 1);
+          var circleWidthSegments = ((document.getElementById("circle-width-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-width-segments") as HTMLInputElement).value : 16);
+          var circleHeightSegments = ((document.getElementById("circle-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-height-segments") as HTMLInputElement).value : 16);
+
+          const ball = this.add.sphere(
+            { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(circleRadius), heightSegments: Number(circleHeightSegments), widthSegments: Number(circleWidthSegments) },
+            {
+              phong: { color: color },
+            }
+          );
+          this.physics.add.existing(ball, { shape: "convex", ...breakableConfig })
+          ball.body.setBounciness(bounce)
+          ball.body.setGravity(0, gravity, 0)
+          ball.body.setFriction(friction)
+          ball.body.setCollisionFlags(Number(objectType))
+        }
+        else if (e?.selectedIndex === 2) {
+          var height = (document.getElementById("cylinder-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-height") as HTMLInputElement).value : 2;
+          var bottomRadius = (document.getElementById("bottom-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("bottom-radius") as HTMLInputElement).value : 1;
+          var topRadius = ((document.getElementById("top-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("top-radius") as HTMLInputElement).value : 1);
+          var startOnSideBool = ((document.getElementById("cylinder-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-start-on-side") as HTMLInputElement).checked : false);
+          var radialSegments = ((document.getElementById("cylinder-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-segments") as HTMLInputElement).value : 12);
+
+          const cylinder = this.add.cylinder({
             x: intersectionPoint.x,
             y: intersectionPoint.y,
             z: intersectionPoint.z,
-            width: Number(squareWidth),
-            height: Number(squareHeight),
-            depth: Number(squareLength),
-          },
-          {
+            radiusTop: Number(topRadius),
+            radiusBottom: Number(bottomRadius),
+            height: Number(height),
+            radiusSegments: Number(radialSegments),
+          }, {
             phong: { color: color },
+            compound: true,
+          });
+          if (startOnSideBool) {
+            cylinder.rotateX(-80)
           }
-        );
-        this.physics.add.existing(box);
-        box.body.setBounciness(bounce)
-        box.body.setGravity(0, gravity, 0)
-        box.body.setFriction(friction)
-        box.body.setCollisionFlags(Number(objectType))
-      }
-      else if (e?.selectedIndex === 1) {
-        var circleRadius = ((document.getElementById("circle-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-radius") as HTMLInputElement).value : 1);
-        var circleWidthSegments = ((document.getElementById("circle-width-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-width-segments") as HTMLInputElement).value : 16);
-        var circleHeightSegments = ((document.getElementById("circle-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-height-segments") as HTMLInputElement).value : 16);
-
-        const ball = this.add.sphere(
-          { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(circleRadius), heightSegments: Number(circleHeightSegments), widthSegments: Number(circleWidthSegments) },
-          {
-            phong: { color: color },
+          this.physics.add.existing(cylinder, { shape: "convex", ...breakableConfig })
+          cylinder.body.setBounciness(bounce);
+          cylinder.body.setGravity(0, gravity, 0);
+          cylinder.body.setFriction(friction);
+          cylinder.body.setCollisionFlags(Number(objectType))
+        }
+        else if (e?.selectedIndex === 3) {
+          var startOnSideBool = ((document.getElementById("torus-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-start-on-side") as HTMLInputElement).checked : false);
+          var radialSegments = ((document.getElementById("torus-tubular-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-tubular-segments") as HTMLInputElement).value : 12);
+          var tubularSegments = ((document.getElementById("torus-radial-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-radial-segments") as HTMLInputElement).value : 12);
+          var radius = ((document.getElementById("torus-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-radius") as HTMLInputElement).value : 1);
+          var tube = ((document.getElementById("torus-tube") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-tube") as HTMLInputElement).value : 0.2);
+          let torus = this.add.torus(
+            { x: intersectionPoint.x, y: intersectionPoint.y + 1, z: intersectionPoint.z, tube: Number(tube), radialSegments: Number(tubularSegments), tubularSegments: Number(radialSegments), radius: Number(radius) },
+            { lambert: { color: color }, },
+          );
+          if (startOnSideBool) {
+            torus.rotateX(-80)
           }
-        );
-        this.physics.add.existing(ball, { shape: "convex" })
-        ball.body.setBounciness(bounce)
-        ball.body.setGravity(0, gravity, 0)
-        ball.body.setFriction(friction)
-        ball.body.setCollisionFlags(Number(objectType))
-      }
-      else if (e?.selectedIndex === 2) {
-        var height = (document.getElementById("cylinder-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-height") as HTMLInputElement).value : 2;
-        var bottomRadius = (document.getElementById("bottom-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("bottom-radius") as HTMLInputElement).value : 1;
-        var topRadius = ((document.getElementById("top-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("top-radius") as HTMLInputElement).value : 1);
-        var startOnSideBool = ((document.getElementById("cylinder-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-start-on-side") as HTMLInputElement).checked : false);
-        var radialSegments= ((document.getElementById("cylinder-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cylinder-segments") as HTMLInputElement).value : 12);
-
-        const cylinder = this.add.cylinder({
-          x: intersectionPoint.x,
-          y: intersectionPoint.y,
-          z: intersectionPoint.z,
-          radiusTop: Number(topRadius),
-          radiusBottom: Number(bottomRadius),
-          height: Number(height),
-          radiusSegments: Number(radialSegments),
-        }, {
-          phong: { color: color },
-          compound: true,
-        });
-        if (startOnSideBool) {
-          cylinder.rotateX(-80)
+          this.physics.add.existing(torus, { shape: "convex", ...breakableConfig })
+          torus.body.setBounciness(bounce);
+          torus.body.setGravity(0, gravity, 0);
+          torus.body.setFriction(friction);
+          torus.body.setCollisionFlags(Number(objectType))
         }
-        this.physics.add.existing(cylinder, { shape: "convex" })
-        cylinder.body.setBounciness(bounce);
-        cylinder.body.setGravity(0, gravity, 0);
-        cylinder.body.setFriction(friction);
-        cylinder.body.setCollisionFlags(Number(objectType))
-      }
-      else if (e?.selectedIndex ===3) {
-        var startOnSideBool = ((document.getElementById("torus-start-on-side") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-start-on-side") as HTMLInputElement).checked : false);
-        var radialSegments = ((document.getElementById("torus-tubular-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-tubular-segments") as HTMLInputElement).value : 12);
-        var tubularSegments = ((document.getElementById("torus-radial-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-radial-segments") as HTMLInputElement).value : 12);
-        var radius = ((document.getElementById("torus-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-radius") as HTMLInputElement).value : 1);
-        var tube = ((document.getElementById("torus-tube") as HTMLInputElement)?.value !== "" ? (document.getElementById("torus-tube") as HTMLInputElement).value : 0.2);
-        let torus = this.add.torus(
-          { x:intersectionPoint.x ,y: intersectionPoint.y+1, z: intersectionPoint.z, tube: Number(tube), radialSegments: Number(tubularSegments), tubularSegments: Number(radialSegments), radius: Number(radius)  },
-          { lambert: { color: color }, },
-        );
-        if (startOnSideBool) {
-          torus.rotateX(-80)
-        }
-        this.physics.add.existing(torus, {shape: "convex"})
-        torus.body.setBounciness(bounce);
-        torus.body.setGravity(0, gravity, 0);
-        torus.body.setFriction(friction);
-        torus.body.setCollisionFlags(Number(objectType))
-      }
-      else if (e?.selectedIndex === 4) {
-        var radialSegments = ((document.getElementById("cone-radial-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radial-segments") as HTMLInputElement).value : 12);
-        var heightSegments = ((document.getElementById("cone-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height-segments") as HTMLInputElement).value : 2);
-        var height = ((document.getElementById("cone-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height") as HTMLInputElement).value : 2);
-        var radius = ((document.getElementById("cone-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radius") as HTMLInputElement).value : 1);
+        else if (e?.selectedIndex === 4) {
+          var radialSegments = ((document.getElementById("cone-radial-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radial-segments") as HTMLInputElement).value : 12);
+          var heightSegments = ((document.getElementById("cone-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height-segments") as HTMLInputElement).value : 2);
+          var height = ((document.getElementById("cone-height") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-height") as HTMLInputElement).value : 2);
+          var radius = ((document.getElementById("cone-radius") as HTMLInputElement)?.value !== "" ? (document.getElementById("cone-radius") as HTMLInputElement).value : 1);
 
-        const cone = this.add.cone({x:intersectionPoint.x, y: intersectionPoint.y, z:intersectionPoint.z, radius: Number(radius), height: Number(height), heightSegments: Number(heightSegments), radiusSegments: Number(radialSegments)}, { phong: { color: color } });
-        this.physics.add.existing(cone, {shape: 'convex'})
-        cone.body.setBounciness(bounce);
-        cone.body.setGravity(0, gravity, 0);
-        cone.body.setFriction(friction);
-        cone.body.setCollisionFlags(Number(objectType))
+          const cone = this.add.cone({ x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(radius), height: Number(height), heightSegments: Number(heightSegments), radiusSegments: Number(radialSegments) }, { phong: { color: color } });
+          this.physics.add.existing(cone, { shape: 'convex', ...breakableConfig })
+          cone.body.setBounciness(bounce);
+          cone.body.setGravity(0, gravity, 0);
+          cone.body.setFriction(friction);
+          // cone.body.setCollisionFlags(Number(objectType))
+        }
+      }
+      else if (deleteToolBool) {
+        var hasDeletedYet = false
+        for (let i = 0; i < intersects.length; i++) {
+          try {
+            if (intersects[i].object !== map && !hasDeletedYet) {
+              this.destroy(intersects[i].object)
+              hasDeletedYet = true;
+              break;
+            }
+          } catch(err) {
+            void(0)
+          }
+        }
       }
     }
   }
@@ -402,3 +427,23 @@ function getObjectType() {
   var objectType = (document.getElementById('object-type') as HTMLSelectElement).options[(document.getElementById("object-type") as HTMLSelectElement).selectedIndex].value;
   return objectType;
 }
+
+document.getElementById("breakable")?.addEventListener("change", (element) => {
+  if ((element.target as HTMLInputElement).checked) {
+    (document.getElementById("fracture-impluse") as HTMLInputElement).disabled = false;
+  }
+  else {
+    (document.getElementById("fracture-impluse") as HTMLInputElement).disabled = true;
+  }
+})
+
+document.getElementById('delete-tool-activation')?.addEventListener("click", (element) => {
+  if (deleteToolBool) {
+    deleteToolBool = !deleteToolBool;
+    (document.getElementById("value-changer") as HTMLDivElement)!.style.display = "block"
+  }
+  else if (!deleteToolBool) {
+    deleteToolBool = !deleteToolBool;
+    (document.getElementById("value-changer") as HTMLDivElement)!.style.display = "none"
+  }
+})

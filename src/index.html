@@ -72,6 +72,10 @@
       <input type="number" min="-1000" id="bounce" max="1000" onkeyup="enforceMinMax(this)">
       <h6 class="label">Friction</h6>
       <input type="number" min="-1000" max="1000" id="friction" onkeyup="enforceMinMax(this)">
+      <h6 class="label">Breakable</h6>
+      <input type="checkbox" id="breakable">
+      <h6 class="label">Fracture Impluse</h6>
+      <input type="number" min="-10" max="100" id="fracture-impluse" onkeyup="enforceMinMax(this)" disabled>
       <h6 class="label">Type</h6>
     </div>
     <select id="object-type">
@@ -95,6 +99,7 @@
         <option value="1">Slope</option>
         <option value="2">Mountain</option>
       </select>
+      <button id="delete-tool-activation">X</button>
       <button onclick="openHelpMenu()" class="open-help-menu">?</button>
     </div>
   </div>

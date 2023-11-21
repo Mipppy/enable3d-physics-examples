@@ -7,7 +7,7 @@ body {
 }
 
 #sidebar-container {
-    width: 3%;
+    width: 4%;
     position: absolute;
     height: 600px;
     background: rgb(213, 213, 214);
@@ -20,40 +20,21 @@ body {
     margin: auto;
     top: 0;
     bottom: 0;
-    right: 5px;
+    right: 15px;
     align-items: center;
-}
-
-#options-menu {
-    display: block;
-    cursor: pointer;
-    border-radius: 15px;
-    border: none;
-    text-align: center;
-}
-
-#options-menu:hover {
-    background-color: grey;
-}
-
-#options-menu:focus {
-    background-color: grey;
-}
-
-#options-menu option {
-    cursor: pointer;
-}
-
-#options-menu option:hover {
-    background-color: transparent !important;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+resize: both;
+overflow: auto;
 }
 
 #subcontainer {
     position: absolute;
     margin: auto;
-    top: 0;
-    bottom: 0;
-    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    justify-content: right;
 }
 
 #value-changer {
@@ -61,10 +42,15 @@ body {
     width: 200px;
     height: 200px;
     background-color: rgb(122, 122, 122, 0.8);
-    right: calc(3.75% + 20px);
+    right: calc(5.75% + 20px);
     top: 30px;
     border-radius: 20px;
     border: rgb(122, 122, 122, 0.95) solid 1px;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+resize: both;
+overflow: auto;
 }
 
 input {
@@ -77,10 +63,6 @@ input {
     display: inline-block;
     margin: 0;
     margin-left: 10px;
-}
-
-#selected-object {
-    text-align: center;
 }
 
 input::-webkit-outer-spin-button,
@@ -186,4 +168,34 @@ hr {
     border: 1px solid black;
     width: 75%;
     height: 3px;
+}
+
+
+#subcontainer select {
+    display: block !important;
+    margin-left: 3px;
+    margin-top: 10px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 50px;
+    cursor: pointer !important;
+}   
+#subcontainer select:focus {
+    outline: none;
+    /* Thanks to the devs at https://www.cssmatic.com/box-shadow for making a wonderful box shadow tool! */
+    -webkit-box-shadow: inset 0px 0px 45px 34px rgba(0,0,0,0.22);
+    -moz-box-shadow: inset 0px 0px 45px 34px rgba(0,0,0,0.22);
+    box-shadow: inset 0px 0px 45px 34px rgba(0,0,0,0.22);
+}
+#subcontainer button {
+    margin-left: 3px;
+    margin-top: 10px;
+    display: block !important;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(122,122,122,0.7);
+}
+#subcontainer button:hover {
+    background-color: rgb(122,122,122,0.98);
 }

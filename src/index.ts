@@ -1,4 +1,6 @@
+
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import { Scene3D, PhysicsLoader, Project, ExtendedObject3D } from "enable3d";
 import * as THREE from "three";
 var frames = 0;
@@ -6,6 +8,7 @@ var startTime = performance.now();
 var fpsElement = document.getElementById("fps")!;
 let mouse, raycaster, map, previousMap, slope0, slope1, slope2, slope3, slopePlane;
 let mountainPiece1, mountainPiece2, mountainPiece3, mountainPiece4, mountainPiece5, deleteToolBool = false;
+let scene
 export class ThreePhysicsComponent extends Scene3D {
   constructor() {
     super();
@@ -39,7 +42,10 @@ export class ThreePhysicsComponent extends Scene3D {
       { y: 10, z: 3, tube: 0.2, radialSegments: 16, tubularSegments: 16 },
       { lambert: { color: "orange" } }
     );
+    
     torus1.body.applyForceX(5);
+
+    
     // const ball = this.physics.add.sphere(
     //   { x: -200, y: 20, radius: 3, heightSegments: 16, widthSegments: 16 },
     //   { phong: { color: "black" } }
@@ -55,12 +61,25 @@ export class ThreePhysicsComponent extends Scene3D {
     //     }
     //   }
     // }
+
+
+    const resize = () => {
+      const newWidth = window.innerWidth
+      const newHeight = window.innerHeight
+
+      this.renderer.setSize(newWidth, newHeight)
+      this.camera.updateProjectionMatrix()
+    }
+
+    window.onresize = resize
+    resize()
+
     this.renderer.domElement.addEventListener(
       "click",
       this.onMouseClick.bind(this)
-    );
+    )
   }
-
+      
   getAndSwitchMap() {
     var currentMap = Number((document.getElementById("map") as HTMLSelectElement).options[(document.getElementById("map") as HTMLSelectElement).selectedIndex].value)
     if (previousMap !== currentMap) {
@@ -179,7 +198,7 @@ export class ThreePhysicsComponent extends Scene3D {
         mountainPiece4 = this.add.sphere(
           { x: 6, y: 3, z: 5, radius: Number(6), heightSegments: Number(1), widthSegments: Number(5) },
           {
-            phong: { color: "green" },
+            phong: { color: "green" }
           }
         );
         this.physics.add.existing(mountainPiece4, { shape: "convex" })
@@ -277,9 +296,9 @@ export class ThreePhysicsComponent extends Scene3D {
           var circleHeightSegments = ((document.getElementById("circle-height-segments") as HTMLInputElement)?.value !== "" ? (document.getElementById("circle-height-segments") as HTMLInputElement).value : 16);
 
           const ball = this.add.sphere(
-            { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z, radius: Number(circleRadius), heightSegments: Number(circleHeightSegments), widthSegments: Number(circleWidthSegments) },
+            { x: intersectionPoint.x, y: intersectionPoint.y, z: intersectionPoint.z,radius: Number(circleRadius), heightSegments: Number(circleHeightSegments), widthSegments: Number(circleWidthSegments) },
             {
-              phong: { color: color },
+              phong: { color: color }
             }
           );
           this.physics.add.existing(ball, { shape: "convex", ...breakableConfig })
@@ -353,7 +372,7 @@ export class ThreePhysicsComponent extends Scene3D {
         var hasDeletedYet = false
         for (let i = 0; i < intersects.length; i++) {
           try {
-            if (intersects[i].object !== map && !hasDeletedYet) {
+            if (intersects[i].object !== map && !hasDeletedYet && intersects[i].object !== slope0 && intersects[i].object !== slope1 && intersects[i].object !== slope2 && intersects[i].object !== slope3 && intersects[i].object !== slopePlane && intersects[i].object !== mountainPiece1 && intersects[i].object !== mountainPiece2 && intersects[i].object !== mountainPiece3 && intersects[i].object !== mountainPiece4 && intersects[i].object !== mountainPiece5) {
               this.destroy(intersects[i].object)
               this.physics.destroy(intersects[i].object)
               hasDeletedYet = true;
@@ -376,6 +395,10 @@ const config = {
 PhysicsLoader("/ammo", () => new Project(config));
 
 document.getElementById("options-menu")?.addEventListener("change", (element) => {
+  if (deleteToolBool) {
+    deleteTool()
+  }
+  document.getElementById("value-changer")!.style.display = "inline-block"
   hideOtherElements()
   var currentObjectSelected = (element.target as HTMLSelectElement).options[(element.target as HTMLSelectElement).selectedIndex].text
   document.getElementById("selected-object")!.innerText = currentObjectSelected;
@@ -439,6 +462,9 @@ document.getElementById("breakable")?.addEventListener("change", (element) => {
 })
 
 document.getElementById('delete-tool-activation')?.addEventListener("click", (element) => {
+  deleteTool()
+})
+function deleteTool() {
   if (deleteToolBool) {
     deleteToolBool = !deleteToolBool;
     (document.getElementById("value-changer") as HTMLDivElement)!.style.display = "block"
@@ -447,4 +473,4 @@ document.getElementById('delete-tool-activation')?.addEventListener("click", (el
     deleteToolBool = !deleteToolBool;
     (document.getElementById("value-changer") as HTMLDivElement)!.style.display = "none"
   }
-})
+}

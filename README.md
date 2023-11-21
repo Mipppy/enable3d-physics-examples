@@ -11,10 +11,12 @@ Web Physics is a physics simulation that runs at stable 30 frams in your web bro
 - Cylinder
 - Torus
 - Cone
-The maps are
+
+The built in maps are: 
 - Default
 - Mountain
 - Slope
+
 After selecting what shape you want to place, you can modify properties of the shape to create even more shapes!  You can turn cones in pyramids, spheres in diamonds, and so much more!  Your imagination is truly the limit for this.  
 
 ## How to run
